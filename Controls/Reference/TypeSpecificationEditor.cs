@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -151,6 +151,8 @@ namespace Reflexil.Editors
 					{
 						tslevel.SelectedItem = TypeSpecification.Pointer;
 					}
+					else if (nested is GenericInstanceType)
+						continue;
 
 					var tspec = nested as Mono.Cecil.TypeSpecification;
 					nested = tspec.ElementType;

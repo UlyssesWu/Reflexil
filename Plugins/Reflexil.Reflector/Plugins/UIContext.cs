@@ -1,4 +1,4 @@
-﻿/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+﻿/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -120,6 +120,15 @@ namespace Reflexil.Plugins.Reflector
 			Item = itembuilder();
 			if (image != null)
 				Item.Image = image;
+
+			// Reflector is hiding separators in SubMenuItem ! Workaround that
+			if (Item is ICommandBarSeparator)
+			{
+				Item.PropertyChanged += (sender, args) => {
+					if (!Item.Visible)
+						Item.Visible = true;
+				};
+			}
 
 			Bar = bar;
 

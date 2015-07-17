@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -37,7 +37,7 @@ namespace Reflexil.Plugins.Reflector
 		private readonly Dictionary<IEventDeclaration, EventDefinition> _eventcache;
 		private readonly Dictionary<IResource, Resource> _resourcecache;
 		//fix: use toString() instead of object himself (getHashcode seems to be overriden)
-		private readonly Dictionary<String, AssemblyNameReference> _assemblynamereferencecache;
+		private readonly Dictionary<string, AssemblyNameReference> _assemblynamereferencecache;
 		private readonly Dictionary<ITypeDeclaration, TypeDefinition> _typecache;
 
 		public ReflectorAssemblyContext()

@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -122,21 +122,21 @@ namespace Reflexil.Compilation
 		/// <summary>
 		/// Write a method signature to the text buffer
 		/// </summary>
-		/// <param name="mdef">Method definition</param>
-		protected override void WriteMethodSignature(MethodDefinition mdef)
+		/// <param name="mref">Method reference</param>
+		protected override void WriteMethodSignature(MethodReference mref)
 		{
-			if (IsUnsafe(mdef))
+			if (IsUnsafe(mref))
 			{
 				WriteComment("This method is 'unsafe' and cannot be used in VB.NET");
 				Write(Comment);
 			}
-			mdef.Accept(this);
+			mref.Accept(this);
 
-			if (mdef.ReturnType.FullName == typeof (void).FullName)
+			if (mref.ReturnType.FullName == typeof (void).FullName)
 				return;
 
 			Write(VisualBasicKeyword.As, SpaceSurrounder.Both);
-			VisitTypeReference(mdef.ReturnType);
+			VisitTypeReference(mref.ReturnType);
 		}
 
 		/// <summary>
@@ -183,16 +183,10 @@ namespace Reflexil.Compilation
 		/// <summary>
 		/// Write a type signature to the text buffer
 		/// </summary>
-		/// <param name="tdef">Type definition</param>
-		protected override void WriteTypeSignature(TypeDefinition tdef)
+		/// <param name="tref">Type reference</param>
+		protected override void WriteTypeSignature(TypeReference tref)
 		{
-			tdef.Accept(this);
-
-
-			if (tdef.GenericParameters.Count > 0)
-			{
-				Replace(GenericTypeTag + tdef.GenericParameters.Count, String.Empty);
-			}
+			tref.Accept(this);
 		}
 
 		/// <summary>
@@ -325,12 +319,21 @@ namespace Reflexil.Compilation
 		}
 
 		/// <summary>
+		/// Visit a method reference
+		/// </summary>
+		/// <param name="method">Method reference</param>
+		public override void VisitMethodReference(MethodReference method)
+		{
+			// TODO
+		}
+
+		/// <summary>
 		/// Visit a type definition
 		/// </summary>
 		/// <param name="type">Type definition</param>
 		public override void VisitTypeDefinition(TypeDefinition type)
 		{
-			HandleTypeName(type, type.Name);
+			WriteTypeName(type, type.Name);
 		}
 
 		/// <summary>
@@ -347,20 +350,17 @@ namespace Reflexil.Compilation
 			if (type.Namespace != String.Empty)
 				name = type.Namespace + NamespaceSeparator + name;
 
-			if (type is GenericInstanceType)
+			WriteTypeName(type, name);
+			var git = type as GenericInstanceType;
+			if (git != null)
 			{
-				var git = type as GenericInstanceType;
-				name = name.Replace(GenericTypeTag + git.GenericArguments.Count, String.Empty);
-				HandleTypeName(type, name);
+				WriteTypeName(git, name);
 				_displayConstraintsStack.Push(false);
 				VisitVisitableCollection(LeftParenthesis + Surround(VisualBasicKeyword.Of, SpaceSurrounder.After), RightParenthesis,
 					BasicSeparator, false, git.GenericArguments);
 				_displayConstraintsStack.Pop();
 			}
-			else
-			{
-				HandleTypeName(type, name);
-			}
+
 			if (_displayConstraintsStack.Peek() && (type is GenericParameter))
 			{
 				VisitVisitableCollection(Surround(VisualBasicKeyword.As, SpaceSurrounder.Both) + LeftBrace, RightBrace,

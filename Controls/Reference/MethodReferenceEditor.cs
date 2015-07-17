@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,6 +24,8 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System;
+using Reflexil.Compilation;
+using Reflexil.Properties;
 
 #endregion
 
@@ -32,6 +34,15 @@ namespace Reflexil.Editors
 	public class MethodReferenceEditor : BaseMethodReferenceEditor
 	{
 		#region Methods
+
+		protected override string PrepareText(MethodReference value)
+		{
+			if (!(value is GenericInstanceMethod))
+				return base.PrepareText(value);
+
+			var helper = LanguageHelperFactory.GetLanguageHelper(Settings.Default.Language);
+			return helper.GetMethodSignature(value);
+		}
 
 		public override Instruction CreateInstruction(ILProcessor worker, OpCode opcode)
 		{

@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -24,6 +24,9 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 using Mono.Cecil;
 using Mono.Cecil.Cil;
 using System;
+using System.Windows.Forms;
+using Reflexil.Compilation;
+using Reflexil.Properties;
 
 #endregion
 
@@ -33,9 +36,35 @@ namespace Reflexil.Editors
 	{
 		#region Methods
 
+		protected override string PrepareText(TypeReference value)
+		{
+			if (!(value is GenericInstanceType))
+				return base.PrepareText(value);
+
+			var helper = LanguageHelperFactory.GetLanguageHelper(Settings.Default.Language);
+			return helper.GetTypeSignature(value);
+		}
+
 		public override Instruction CreateInstruction(ILProcessor worker, OpCode opcode)
 		{
 			return worker.Create(opcode, MethodDefinition.DeclaringType.Module.Import(SelectedOperand));
+		}
+
+		protected override void OnMouseHover(EventArgs e)
+		{
+			var tooltip = new ToolTip
+			{
+				ToolTipTitle = "Type",
+				UseFading = true,
+				UseAnimation = true,
+				IsBalloon = true,
+				ShowAlways = true,
+				AutoPopDelay = 5000,
+				InitialDelay = 1000,
+				ReshowDelay = 0
+			};
+
+			tooltip.SetToolTip(this, Text);
 		}
 
 		#endregion

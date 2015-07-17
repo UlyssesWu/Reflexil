@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -76,9 +76,14 @@ namespace Reflexil.Editors
 			set
 			{
 				_operand = value;
-				Text = _operand != null ? value.Name : string.Empty;
+				Text = PrepareText(value);
 				RaiseSelectedOperandChanged();
 			}
+		}
+
+		protected virtual string PrepareText(T value)
+		{
+			return _operand != null ? value.Name : string.Empty;
 		}
 
 		#endregion
@@ -92,13 +97,37 @@ namespace Reflexil.Editors
 			if (SelectedOperandChanged != null) SelectedOperandChanged(this, EventArgs.Empty);
 		}
 
+		private static MemberReference HandleGenericParameterProvider(MemberReference member)
+		{
+			if (member == null)
+				return null;
+
+			var provider = member as IGenericParameterProvider;
+			if (provider == null || !provider.HasGenericParameters)
+				return member;
+
+			var form = GenericInstanceFormFactory.GetForm(member);
+			if (form == null)
+				return member;
+
+			using (form)
+			{
+				if (form.ShowDialog() == DialogResult.OK)
+					return (MemberReference) form.GenericInstance;
+			}
+
+			return member;
+		}
+
 		protected override void OnClick(EventArgs e)
 		{
 			base.OnClick(e);
 			using (var refselectform = new GenericMemberReferenceForm<T>(_operand, AssemblyRestriction))
 			{
-				if (refselectform.ShowDialog() == DialogResult.OK)
-					SelectedOperand = (T) refselectform.SelectedItem;
+				if (refselectform.ShowDialog() != DialogResult.OK)
+					return;
+
+				SelectedOperand = (T) HandleGenericParameterProvider(refselectform.SelectedItem);
 			}
 		}
 

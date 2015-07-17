@@ -1,4 +1,4 @@
-﻿/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+﻿/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -190,6 +190,34 @@ namespace Reflexil.Plugins.Reflector
 		public override IAssemblyContext GetAssemblyContext(string location)
 		{
 			return GetAssemblyContext<ReflectorAssemblyContext>(location);
+		}
+
+		public override IAssemblyContext GetAssemblyContext(object item)
+		{
+			if (item == null)
+				return null;
+
+			var asm = item as IAssemblyLocation;
+			if (asm != null)
+				return GetAssemblyContext(asm.Location);
+
+			var module = item as IModule;
+			if (module != null)
+				return GetAssemblyContext(module.Location);
+
+			var tdec = item as ITypeDeclaration;
+			if (tdec != null)
+				return GetAssemblyContext(GetModule(tdec));
+
+			var mdec = item as IMemberDeclaration;
+			if (mdec != null)
+				return GetAssemblyContext(mdec.DeclaringType as ITypeDeclaration);
+
+			var res = item as IResource;
+			if (res != null)
+				return GetAssemblyContext(res.Module);
+
+			return null;
 		}
 
 		public void RemoveObsoleteAssemblyContexts(IEnumerable<String> locations)

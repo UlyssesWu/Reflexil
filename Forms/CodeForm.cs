@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -291,6 +291,11 @@ namespace Reflexil.Forms
 			var typename = (_mdefsource.DeclaringType.IsNested)
 				? _mdefsource.DeclaringType.Name
 				: _mdefsource.DeclaringType.FullName;
+
+			// Generic hierarchy will push all generic parameters to the final type, so fix type name
+			var tag = typename.LastIndexOf(BaseLanguageHelper.GenericTypeTag, StringComparison.Ordinal);
+			if (tag >= 0)
+				typename = string.Concat(typename.Substring(0, tag + 1), _mdefsource.DeclaringType.GenericParameters.Count);
 
 			var tdef = CecilHelper.FindMatchingType(asmdef.MainModule, typename);
 			if (tdef != null)

@@ -1,4 +1,4 @@
-/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -38,9 +38,9 @@ namespace Reflexil.Compilation
 		/// <summary>
 		/// Generate method signature 
 		/// </summary>
-		/// <param name="mdef">Method definition</param>
+		/// <param name="mref">Method reference</param>
 		/// <returns>generated source code</returns>
-		string GetMethodSignature(MethodDefinition mdef);
+		string GetMethodSignature(MethodReference mref);
 
 		/// <summary>
 		/// Generate method
@@ -59,9 +59,9 @@ namespace Reflexil.Compilation
 		/// <summary>
 		/// Generate type signature
 		/// </summary>
-		/// <param name="tdef">Type definition</param>
+		/// <param name="tref">Type reference</param>
 		/// <returns>generated source code</returns>
-		string GetTypeSignature(TypeDefinition tdef);
+		string GetTypeSignature(TypeReference tref);
 
 		/// <summary>
 		/// Generate source code from method declaring type. All others

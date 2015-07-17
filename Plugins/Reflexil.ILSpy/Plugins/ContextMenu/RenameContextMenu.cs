@@ -1,4 +1,4 @@
-﻿/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+﻿/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -27,7 +27,7 @@ using Reflexil.Utils;
 
 namespace Reflexil.Plugins.ILSpy.ContextMenu
 {
-	[ExportContextMenuEntry(Icon = "resources/rename.png", Header = "Rename...", Category = "ReflexilMember")]
+	[ExportContextMenuEntry(Icon = "resources/rename.png", Header = "Rename...", Category = "ReflexilMember", Order = 10)]
     internal class RenameContextMenu : BaseMemberContextMenu, IRenamerContextMenu
     {
 		public override void Execute(TextViewContext context)

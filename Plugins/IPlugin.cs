@@ -1,4 +1,4 @@
-﻿/* Reflexil Copyright (c) 2007-2014 Sebastien LEBRETON
+﻿/* Reflexil Copyright (c) 2007-2015 Sebastien LEBRETON
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
@@ -80,6 +80,13 @@ namespace Reflexil.Plugins
 		/// <param name="location">Assembly location</param>
 		/// <returns>Null if unable to load the assembly</returns>
 		IAssemblyContext GetAssemblyContext(string location);
+
+		/// <summary>
+		/// Get an assembly context in cache or create a new one if necessary
+		/// </summary>
+		/// <param name="object">Any host object model item</param>
+		/// <returns>Null if unable to load the assembly</returns>
+		IAssemblyContext GetAssemblyContext(object item);
 
 		/// <summary>
 		/// Reload an assembly context

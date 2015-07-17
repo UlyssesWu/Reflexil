@@ -365,6 +365,18 @@
     <Compile Include="Forms\AssemblyCleanerForm.Designer.cs">
       <DependentUpon>AssemblyCleanerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GenericInstanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenericInstanceForm.Designer.cs">
+      <DependentUpon>GenericInstanceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GenericInstanceMethodForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GenericInstanceTypeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ObfuscatorForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -877,6 +889,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\AssemblyCleanerForm.resx">
       <DependentUpon>AssemblyCleanerForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GenericInstanceForm.resx">
+      <DependentUpon>GenericInstanceForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\ObfuscatorForm.resx">
